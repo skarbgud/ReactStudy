@@ -28,16 +28,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-class Subject extends Component {
-  render() {
-    return (
-      <header>
-          <h1>WEB</h1>
-          world wide web!
-      </header>
-    );
-  }
-}
+
 
 class TOC extends Component {
   render() {
@@ -57,9 +48,20 @@ class Content extends Component {
   render() {
     return (
       <article>
-        <h2>HTML</h2>
-        HTML is HyperText Markup Language.
+        <h2>{this.props.title}</h2>
+        {this.props.desc}
       </article>
+    );
+  }
+}
+
+class Subject extends Component {
+  render() {
+    return (
+      <header>
+          <h1>{this.props.title}</h1>
+          {this.props.sub}
+      </header>
     );
   }
 }
@@ -69,9 +71,9 @@ class App extends Component {
     return (
       <div className="App">
         {/* 컴포넌트의 이름에만 집중해서 복잡도를 낮춘다. */}
-        <Subject></Subject>
+        <Subject title="WEB" sub="world wide web!"></Subject>
         <TOC></TOC>
-        <Content></Content>
+        <Content title="HTML" desc="HTML is HyperText Markup Language."></Content>
       </div>
     );
   }
