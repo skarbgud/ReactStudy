@@ -58,9 +58,16 @@ class App extends Component {
     return (
       <div className="App">
         {/* 컴포넌트의 이름에만 집중해서 복잡도를 낮춘다. */}
-        <Subject 
+        {/* <Subject 
           title={this.state.subject.title} 
-          sub={this.state.subject.sub}></Subject>
+          sub={this.state.subject.sub}></Subject> */}
+        <header>
+          <h1><a href="/" onClick={function(e){
+            console.log(e);
+            e.preventDefault();
+          }}>{this.state.subject.title}</a></h1>
+          {this.state.subject.sub}
+        </header>
         <TOC data={this.state.contents}></TOC>
         <Content title={_title} desc={_desc}></Content>
       </div>
