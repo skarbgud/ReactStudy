@@ -75,11 +75,17 @@ class App extends Component {
         // this.state.contents.push( // push 는 원본을 바꾸지만 concat은 원본을 바꾸지 않고 새로운 배열 리턴한다.
         //   {id:this.max_content_id, title:_title, desc:_desc}
         // );
-        var _contents = this.state.contents.concat(
-          {id:this.max_content_id, title:_title, desc:_desc}
+        // var _contents = this.state.contents.concat(
+        //   {id:this.max_content_id, title:_title, desc:_desc}
+        // )
+      
+        //객체일때는 Object.assign({},원본객체);
+        var newContents = Array.from(this.state.contents);
+        newContents.push(
+            {id:this.max_content_id, title:_title, desc:_desc}
         )
         this.setState({
-          contents:_contents
+          contents:newContents
         });
         console.log(_title,_desc);
       }.bind(this)}></CreateContent>
