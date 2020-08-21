@@ -1,30 +1,3 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-
-// 함수형 방식(function type)
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// 클래스형 방식(class type)
 import React, { Component } from 'react';
 import './App.css';
 import TOC from './components/TOC';
@@ -32,6 +5,7 @@ import ReadContent from './components/ReadContent';
 import CreateContent from './components/CreateContent';
 import Subject from './components/Subject';
 import Control from './components/Control';
+import UpdateContent from './components/UpdateContent';
 
 class App extends Component {
   constructor(props){
@@ -49,25 +23,25 @@ class App extends Component {
       ]
     } 
   }
-  render() {
-    console.log('App render');
+  getReadContent(){
+    var i = 0;
+    while(i < this.state.contents.length){
+      var data = this.state.contents[i];
+      if(data.id === this.state.selected_content_id) {
+        return data;
+      }
+      i = i + 1;
+    }
+  }
+  getContent(){
     var _title, _desc, _article = null;
     if(this.state.mode === 'welcome'){
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
       _article = <ReadContent title={_title} desc={_desc}></ReadContent>
     } else if(this.state.mode === 'read'){
-      var i = 0;
-      while(i < this.state.contents.length){
-        var data = this.state.contents[i];
-        if(data.id === this.state.selected_content_id) {
-          _title = data.title;
-          _desc = data.desc;
-          break;
-        }
-        i = i + 1;
-      }
-      _article = <ReadContent title={_title} desc={_desc}></ReadContent>
+      var _content = this.getReadContent();
+      _article = <ReadContent title={_content.title} desc={_content.desc}></ReadContent>
     } else if(this.state.mode === 'create'){
       _article = <CreateContent onSubmit={function(_title, _desc){
         // add content to this.state.contents
@@ -89,7 +63,25 @@ class App extends Component {
         });
         console.log(_title,_desc);
       }.bind(this)}></CreateContent>
+    } else if(this.state.mode === 'update'){
+      _content = this.getReadContent();
+      _article = <UpdateContent data={_content} onSubmit={function(_title, _desc){
+        // add content to this.state.contents
+        this.max_content_id = this.max_content_id + 1;
+       
+        var _contents = this.state.contents.concat(
+          {id:this.max_content_id, title:_title, desc:_desc}
+        )
+        this.setState({
+          contents:_contents
+        });
+        console.log(_title,_desc);
+      }.bind(this)}></UpdateContent>
     }
+    return _article;
+  }
+  render() {
+    console.log('App render');
     return (
       <div className="App">
         {/* 컴포넌트의 이름에만 집중해서 복잡도를 낮춘다. */}
@@ -114,7 +106,7 @@ class App extends Component {
             mode:_mode,
           });
         }.bind(this)}></Control>
-        {_article}
+        {this.getContent()}
       </div>
     );
   }
